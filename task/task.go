@@ -26,5 +26,5 @@ func saveTasks(tasks []Task) error {
 		return err
 	}
 
-	return ioutil.WriteFile("./db/tasks.json", b, 0644)
+	return ioutil.WriteFile("./data/tasks.json", b, 0644)
 }

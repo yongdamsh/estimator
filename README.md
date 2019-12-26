@@ -9,8 +9,8 @@ A tool for [Evidence Based Scheduling](http://www.biology.emory.edu/research/Pri
 ### How to Use
 - Clone this project `go get github.com/yongdamsh/estimator`
 - Run a web server `go run main.go`
-- Open `http://localhost:5050/task`
+- Open `http://localhost:5050/tasks`
 
 
 ## Balance Estimator
-A Tool to estimate the burning trends of my balance
+A Tool to estimate the burn rate of my balance
