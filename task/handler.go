@@ -7,9 +7,11 @@ import (
 	"sync"
 )
 
-type handler struct{}
+type Handler struct {
+	model *Model
+}
 
-func (h *handler) renderTasks(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) renderTasks(w http.ResponseWriter, req *http.Request) {
 	tasks, err := readTasks()
 
 	if err != nil {
@@ -25,7 +27,7 @@ func (h *handler) renderTasks(w http.ResponseWriter, req *http.Request) {
 	t.Execute(w, tasks)
 }
 
-func (h *handler) renderNewTask(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) renderNewTask(w http.ResponseWriter, req *http.Request) {
 	var wg sync.WaitGroup
 	f := make(chan []Feature)
 
@@ -53,7 +55,7 @@ func (h *handler) renderNewTask(w http.ResponseWriter, req *http.Request) {
 	wg.Wait()
 }
 
-func (h *handler) createTask(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) createTask(w http.ResponseWriter, req *http.Request) {
 	err := req.ParseForm()
 
 	if err != nil {
@@ -84,7 +86,7 @@ func (h *handler) createTask(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, "/tasks/", http.StatusFound)
 }
 
-func (h *handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case http.MethodGet:
 		if req.URL.Path == "/tasks/new" {

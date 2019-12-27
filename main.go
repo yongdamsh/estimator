@@ -15,6 +15,6 @@ var (
 func main() {
 	flag.Parse()
 
-	http.Handle("/tasks/", task.Handler)
+	http.Handle("/tasks/", task.NewHandler())
 	log.Fatal(http.ListenAndServe(*port, nil))
 }
