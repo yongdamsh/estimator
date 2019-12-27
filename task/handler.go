@@ -4,14 +4,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"sync"
 )
 
 type handler struct{}
-
-type model struct {
-	Tasks    []Task
-	Features []Feature
-}
 
 func (h *handler) renderTasks(w http.ResponseWriter, req *http.Request) {
 	tasks, err := readTasks()
@@ -26,17 +22,35 @@ func (h *handler) renderTasks(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 	}
 
-	t.Execute(w, model{tasks, nil})
+	t.Execute(w, tasks)
 }
 
 func (h *handler) renderNewTask(w http.ResponseWriter, req *http.Request) {
+	var wg sync.WaitGroup
+	f := make(chan []Feature)
+
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+
+		features, err := readFeatures()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		f <- features
+	}()
+
 	t, err := template.New("newTask").Parse(NewTaskTemplate)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	t.Execute(w, nil)
+	t.Execute(w, <-f)
+	wg.Wait()
 }
 
 func (h *handler) createTask(w http.ResponseWriter, req *http.Request) {
@@ -47,6 +61,9 @@ func (h *handler) createTask(w http.ResponseWriter, req *http.Request) {
 	}
 
 	newTask := Task{
+		Feature: Feature{
+			Name: req.FormValue("feature"),
+		},
 		Name:    req.FormValue("name"),
 		OrigEst: req.FormValue("estimatedtime"),
 	}
