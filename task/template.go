@@ -30,7 +30,7 @@ const (
 			<body>
 				<h1>Create a New Task</h1>
 				
-				<form name="task" method="post" action="/tasks">
+				<form name="task" method="post" action="/tasks/">
 					<label>Name: <input type="text" name="name" /></label>
 					<br />
 					<label>Estimated Time: <input type="text" name="estimatedtime" placeholder="1h 30m" /></label>

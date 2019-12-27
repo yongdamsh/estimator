@@ -1,13 +1,13 @@
 package task
 
 type Feature struct {
-	Name string `json:"name"`
+	Name string
 }
 
 type Task struct {
-	Feature Feature `json:"feature"`
-	Name    string  `json:"name"`
-	OrigEst string  `json:"originalEstimatedTime"`
-	CurEst  string  `json:"currentEstimatedTime"`
-	Elapsed string  `json:"elapsedTime"`
+	Feature Feature
+	Name    string
+	OrigEst string
+	CurEst  string
+	Elapsed string
 }
