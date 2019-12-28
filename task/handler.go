@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 )
 
@@ -12,7 +13,7 @@ type Handler struct {
 }
 
 func (h *Handler) renderTasks(w http.ResponseWriter, req *http.Request) {
-	tasks, err := readTasks()
+	tasks, err := h.model.tasks()
 
 	if err != nil {
 		log.Fatal(err)
@@ -36,7 +37,7 @@ func (h *Handler) renderNewTask(w http.ResponseWriter, req *http.Request) {
 	go func() {
 		defer wg.Done()
 
-		features, err := readFeatures()
+		features, err := h.model.features()
 
 		if err != nil {
 			log.Fatal(err)
@@ -62,22 +63,21 @@ func (h *Handler) createTask(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 	}
 
-	newTask := Task{
-		Feature: Feature{
-			Name: req.FormValue("feature"),
-		},
-		Name:    req.FormValue("name"),
-		OrigEst: req.FormValue("estimatedtime"),
-	}
-
-	tasks, err := readTasks()
+	featureId, err := strconv.Atoi(req.FormValue("featureId"))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	tasks = append(tasks, newTask)
-	err = saveTasks(tasks)
+	newTask := Task{
+		Feature: Feature{
+			Id: featureId,
+		},
+		Name:      req.FormValue("name"),
+		Estimated: req.FormValue("estimated"),
+	}
+
+	err = h.model.addTask(&newTask)
 
 	if err != nil {
 		log.Fatal(err)

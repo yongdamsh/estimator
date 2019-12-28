@@ -15,7 +15,7 @@ const (
 				
 				<ol>
 					{{range .}}
-						<li>{{.Name}} ({{.Elapsed}}/{{.CurEst}})</li>
+						<li>{{.Name}} ({{.Elapsed}}/{{.Estimated}})</li>
 					{{end}}
 				</ol>
 			</body>
@@ -31,15 +31,15 @@ const (
 				<h1>Create a New Task</h1>
 				
 				<form name="task" method="post" action="/tasks/">
-					<select name="feature" required>
+					<select name="featureId" required>
 						<option value="">Choose a feature</option>
 						{{range .}}
-							<option value={{.Name}}>{{.Name}}</option>
+							<option value={{.Id}}>{{.Name}}</option>
 						{{end}}
 					</select>
 					<label>Name: <input type="text" name="name" required /></label>
 					<br />
-					<label>Estimated Time: <input type="text" name="estimatedtime" placeholder="1h 30m" required /></label>
+					<label>Estimated Time: <input type="text" name="estimated" placeholder="1h 30m" required /></label>
 					<br />
 					<button type="submit">Create</button>
 				</form>
