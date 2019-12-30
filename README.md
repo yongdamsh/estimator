@@ -3,6 +3,8 @@ Tools to estimate important things
 - [Task Estimator](#task-estimator) (WIP)
 - [Balance Estimator](#balance-estimator) (TBD)
 
+This is also a exercise for the [golang study](https://github.com/O-L-K-L/go-study).
+
 ## Task Estimator
 A tool for [Evidence Based Scheduling](http://www.biology.emory.edu/research/Prinz/Cengiz/cs540-485-FA12/resources/evidenceSched.pdf)
 
