@@ -116,6 +116,51 @@ func (m *Model) addTask(task *Task) (err error) {
 	return
 }
 
+func (m *Model) updateTask(task *Task) (err error) {
+	sqlStmt := `
+	update task set name = ?, estimated = ?, elapsed = ?, featureId = ? where id = ?;
+	`
+
+	result, err := m.db.Exec(sqlStmt,
+		task.Name,
+		task.Estimated,
+		task.Elapsed,
+		task.Feature.Id,
+		task.Id,
+	)
+
+	numRows, err := result.RowsAffected()
+
+	if err != nil {
+		return
+	}
+
+	if numRows != 1 {
+		return errors.New("task did not added")
+	}
+
+	return
+}
+
+func (m *Model) task(id int) (task Task, err error) {
+	q := `
+	select * from task where id = ?;
+	`
+
+	row := m.db.QueryRow(q, id)
+
+	err = row.Scan(
+		&task.Id,
+		&task.Name,
+		&task.Estimated,
+		&task.Elapsed,
+		&task.CreatedAt,
+		&task.Feature.Id,
+	)
+
+	return
+}
+
 func NewModel() *Model {
 	db, err := sql.Open("sqlite3", "./data/task.db")
 
