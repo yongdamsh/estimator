@@ -15,4 +15,4 @@
 # vendor/
 
 # DB files
-data/
+data/*
